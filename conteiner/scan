@@ -1,0 +1,27 @@
+#!/bin/bash
+navegador="$1"
+caminho="$2"
+miapath="$3"
+host="$4"
+
+while [[ "$host" == "" ]]; do
+  read -p "Informe o host: " host
+done
+
+bash "$miapath"conteiner/ipAddr 'scan' "$caminho" "$host"
+
+if [[ "$(cat "$caminho"/getIP)" == "" ]]; then
+  echo "Análise ao domínio: $host"
+else
+  host="$(cat $caminho/getIP)"
+  echo "Análise ao servidor: $host"
+fi
+
+# searchlink
+portas="-p22,21,53,3306,80,443,8080,2222,2121,23,42,69,101,110,137,514,6667"
+
+# Scripts usados do NSE
+scriptsNSE="--script banner,clock-skew,daytime,firewall-bypass,http-apache-negotiation,http-auth-finder,http-auth,http-ls,http-robots.txt,http-xssed,http-enum,ip-geolocation-geoplugin,ip-geolocation-ipinfodb,ip-geolocation-map-bing,ip-geolocation-map-google,ip-geolocation-map-kml,ip-geolocation-maxmind,whois-domain,whois-ip"
+
+sudo nmap "$host" -sS -sC -sV --reason -O -T2 "$portas"  --stylesheet "$caminho"/xmlstyle.xsl -oX  "$caminho"/miaScan.xml "$scriptNSE" -Pn
+"$navegador" "$caminho"/miaScan.xml

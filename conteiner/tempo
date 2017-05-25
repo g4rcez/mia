@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo "Hora atual: $(date +%R:%S)"
+echo "Fuso horário: $(date +%Z)"
+echo "Dia: $(date +%d/%m/%Y), dia no ano: $(date +%j)"
+echo "Tempo de sessão: $(uptime | cut -d , -f1 | sed 's/^ *//g')"
+paste <(echo "TCP TimeStamp") <(sudo hping3 localhost -p 80 -S --tcp-timestamp -c 1|grep 'tcpts'|cut -d '=' -f2)|tr '\t' ':'

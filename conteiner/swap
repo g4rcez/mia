@@ -1,0 +1,11 @@
+#!/bin/bash
+# Lista de parâmetros da interface
+# $1 -> usuário
+# $2 -> swappiness
+
+if [[ "$1" == 'root' ]]; then
+	sed -i 's/^.*/# &/g' /etc/sysctl.d/99-sysctl.conf && sed -i 's/ #//g' /etc/sysctl.d/99-sysctl.conf
+	echo "vm.swappiness=$2" >>  /etc/sysctl.d/99-sysctl.conf
+else
+	echo -e "\033[01mApenas o root pode executar esta função\033[0m"
+fi

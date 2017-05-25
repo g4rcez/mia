@@ -1,0 +1,17 @@
+#!/bin/bash
+
+chat='M.I.A:'
+
+mensagem=$(echo $*|tr A-Z a-z)
+if [[ "$mensagem" == "bom dia" ]]; then
+  echo "$chat Bom dia para você também."
+
+elif [[ "$mensagem" == "boa tarde" ]]; then
+  echo "$chat Boa tarde para você também."
+
+elif [[ "$mensagem" == "boa noite" ]]; then
+  echo "$chat Boa noite para você também."
+
+elif [[ "$mensagem" == "mia" ]]; then
+  echo "$chat Esta me chamando duas vezes por quê?"
+fi

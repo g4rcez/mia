@@ -1,0 +1,44 @@
+#!/bin/bash
+pathmia(){ #função para verificar de onde esta executando
+  pathverify=$(ls > /tmp/verify)
+  pathverify=$(cat /tmp/verify|tr "\n" " "|grep "mia"|grep "comands")
+
+  if [ "$pathverify" != "" ]; then
+    abspath="" #caso seja localmente, não haverá nenhum path
+  else
+    numabspath=$(echo $0 | tr "/" "\n" | wc -l | cut -d " " -f1)
+    abspath=$(echo $0 | tr "/" "\n" | head -$(($numabspath-1))|tr "\n" "/")
+    abspath=$(echo "$abspath/")
+  fi
+  export abspath #esta variável é exportada com todo o caminho até chegar ao
+  # programa principal em execução
+  rm -f /tmp/verify
+}
+pathmia $* #passa todos os parâmetros como argumento para a função acima
+echo "$abspath" > /tmp/miapath #caso queira conferir, seus parâmetros estão ali <-
+params="/tmp/params" #alguns parâmetros de outras funções, você pode jogar para dentro
+# deste diretório /\
+
+#minha mensagem de boas vindas para o usuário atual
+hello=$(echo -e "Olá, `whoami`...")
+
+filtraparams(){ # filtra os parâmetros, cortando o caminho e o nome do programa
+# retornando apenas o que você está exeutando e com os parâmetros passados
+    nome=$(basename $0)
+    parametros=$(cat $params | tr " " "\n" | grep -v "$nome" | tr " " "\n")
+    export parametros
+}
+filtraparams $params #chama a função com a variável definida acima
+
+boasvindas(){ #boas vindas ao usuário, identificando a hora atual do sistema
+  hora=`date +%H`
+    # if [ "$LANG" == "pt_BR.UTF-8" ] || [ "$LANG" == "pt_BR" ]; then
+    if [ "$hora" -lt "12" ]; then
+      echo -n "Bom dia";
+    elif [ "$hora" -gt "12" ] && [ "$hora" -lt "18" ]; then
+      echo -n "Boa tarde";
+    else
+      echo -n "Boa noite";
+    fi
+}
+echo "$hello"$(boasvindas)""

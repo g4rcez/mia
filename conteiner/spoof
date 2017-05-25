@@ -1,0 +1,30 @@
+#!/bin/bash
+if [[ "$(whoami)" != "root" ]]; then
+  echo "Apenas o root pode implementar a função"
+  exit
+fi
+
+echo "Lista de Interface de Rede e Mac Addr"
+max=$(echo "$*" | wc -w)
+regex='([0-9a-f]{2}:){5}[0-9a-f]{2}'
+cont=0
+while [[ "$cont" < "$max" ]]; do
+  cont=$(( $cont + 1 ))
+  paste <(echo -e "   $cont"* ) <(echo "$*" | cut -d ' ' -f$cont) <(sudo ifconfig $(echo "$*" | cut -d ' ' -f$cont) | tr A-Z a-z \
+  | egrep -wo $regex) | sed 's/\t/ /1' | expand -t 10 > /tmp/ifaces
+  cat /tmp/ifaces
+done
+
+read -p "Escolha a interface de rede para o Spoof: " choice
+echo "Caso queira um Mac aleatório, informe ::r"
+read -p "Informe um novo mac para o spoof: " macaddr
+macaddr=$(echo $macaddr | tr A-Z a-z | tr ' ' ':' | tr g-z a-f)
+
+if [[ "$macaddr" == "::r" ]]; then
+  macaddr="$(echo $(( $RANDOM % 98 + 1)):$(( $RANDOM % 98 + 1)):$(( $RANDOM % 98 +1)):$(( $RANDOM % 98 +1)):$(( $RANDOM % 98 +1)):$(( $RANDOM % 98 + 1)))"
+fi
+
+sudo ifconfig "$choice" down
+sudo ifconfig -a "$choice" hw ether "$macaddr"
+sudo ifconfig "$choice" up
+paste <(echo "Novo Mac de $choice ->") <(sudo ifconfig "$choice" | egrep -wo "$regex")|tr "\t" " "

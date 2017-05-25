@@ -1,0 +1,29 @@
+#!/bin/bash
+# É necessário passar um argumento para este objeto.
+# Caso seja null, será realizado um loop para fazer
+# a busca do mesmo e executar a função
+# Um path é necessário para ser executada a função
+
+URL="http://api.postmon.com.br/v1/cep/"
+CEP=$(echo "$2" | tr A-Z a-z|tr -d a-z | tr -d "-")
+path="$1"
+
+ajuda(){
+	echo "Este comando é um tracker de endereços e CEPs brasileiros"
+  	echo "Utilizando o site: http://api.postmon.com.br"
+  	echo "Não é necessário informar flags, apenas o CEP que deseja buscar. Exemplo:"
+	echo -e "\tmia cep 25233001"
+}
+
+while [[ "$CEP" == "" ]];do
+	read -p "Informe um CEP para realizar a busca: " CEP
+	CEP=$(echo "$CEP" | tr A-Z a-z|tr -d a-z | tr -d "-")
+done
+
+if [[ "$CEP" != "" ]]; then
+	echo "Realizando busca por: $CEP"
+	cat "$path"/cep
+	lynx -source "${URL}${CEP}" > /dev/null &> "$path"/cep
+fi
+
+rm "$path"/cep

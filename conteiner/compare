@@ -1,0 +1,66 @@
+#!/bin/bash
+# Variável 'busca' faz a busca de todos os argumentos passados após o nome
+# do módulo chamado pelo programa principal
+
+path="$1"
+busca=$(echo "$*" | tr " " "\n" | grep -v -w $(basename $0)|tr "\n" " "|tr -s " "|sed 's/^ //g; s/ $//g')
+
+compareHash(){
+  if [[ "$(echo $1|wc -c|cut -d ' ' -f1)" == "33" ]]; then
+    md5=$(md5sum $file | cut -d " " -f1|tr -d '\n')
+    test "$md5" == "$1" && echo "[md5sum] -> Arquivo Integro" || echo "[md5sum] -> Arquivo não Integro"
+  elif [[ "$(echo $1|wc -c|cut -d ' ' -f1)" == "41" ]]; then
+    shasum=$(sha1sum $file | cut -d " " -f1|tr -d '\n')
+    test "$shasum" == "$1" && echo "[sha1sum] -> Arquivo Integro" || echo "[sha1sum] -> Arquivo não Integro"
+  elif [[ "$(echo $1|wc -c|cut -d ' ' -f1)" == "57" ]]; then
+    sha224=$(sha224sum $file | cut -d " " -f1|tr -d \n)
+    test "$sha224" == "$1" && echo "[sha224sum] -> Arquivo Integro" || echo "[sha224sum] -> Arquivo não Integro"
+  elif [[ "$(echo $1|wc -c|cut -d ' ' -f1)" == "65" ]]; then
+    sha256=$(sha256sum $file | cut -d " " -f1|tr -d '\n')
+    test "$sha256" == "$1" && echo "[sha256sum] -> Arquivo Integro" || echo "[sha256sum] -> Arquivo não Integro"
+  elif [[ "$(echo $1|wc -c|cut -d ' ' -f1)" == "97" ]]; then
+    sha384=$(sha384sum $file | cut -d " " -f1|tr -d \n)
+    test "$sha384" == "$1" && echo "[sha384sum] -> Arquivo Integro" || echo "[sha384sum] -> Arquivo não Integro"
+  elif [[ "$(echo $1|wc -c|cut -d ' ' -f1)" == "129" ]]; then
+    sha512=$(sha512sum $file | cut -d " " -f1|tr -d \n)
+    test "$sha512" == "$1" && echo "[sha512sum] -> Arquivo Integro" echo "[sha512sum] -> Arquivo não Integro"
+  else
+    echo "[$1] -> Comparação falhou."
+  fi
+}
+
+# Bloco de comparação de arquivos
+file=$(echo "$busca"|tr " " "\n"|grep -A 1 -w "\-f"|tail -1)
+if [[ "$file" == "" ]]; then
+  file=$(echo "$busca" |tr " " "\n" | grep -A 1 -w "\-\-file" | tail -1)
+fi
+if [[ "$file" == "" ]]; then
+  read -p "Informe o path do arquivo: " file
+fi
+
+# Bloco de comparação web
+# file=$(echo "$busca"|tr " " "\n"|grep -A 1 "\-f"|tail -1)
+# if [[ "$file" == "" ]]; then
+#   file=$(echo "$busca" |tr " " "\n" | grep -A 1 "\-\-file" | tail -1)
+# fi
+# if [[ "$file" == "" ]]; then
+#   read -p "Informe o path do arquivo: " file
+# fi
+
+
+test ! -e "$file" && echo "Arquivo não existe" && exit || echo "Arquivo: $file"
+
+elementos=$(echo "$#")
+hash=$(echo "$busca" |tr " " "\n"| grep -A $elementos "\-H"|sed '1d')
+if [[ "$hash" == "" ]]; then
+  hash=$(echo "$busca" |tr " " "\n" | grep -A $elementos "\-\-hash"|sed '1d')
+fi
+
+if [[ "$hash" == "" ]]; then
+  read -p "Informe uma hash para a comparação: " hash
+  echo
+fi
+
+for number in $hash; do
+  compareHash "$number"
+done

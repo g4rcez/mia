@@ -1,0 +1,72 @@
+#!/bin/bash
+# Interface do Objeto
+# $1 -> Argumento que define o modo a se usar (obrigatório)
+# $2 -> Argumento que define o diretório de operações (obrigatório)
+# $3 -> Argumento que define o IP(não obrigatório)
+enderecoIP=""
+getIP(){
+  enderecoIP="$(ifconfig -a $1 | egrep '((1[0-9]|[1-9]?)[0-9]|2([0-4][0-9]|5[0-5]))\.((1[0-9]|[1-9]?)[0-9]|2([0-4][0-9]|5[0-5]))\.((1[0-9]|[1-9]?)[0-9]|2([0-4][0-9]|5[0-5]))\.((1[0-9]|[1-9]?)[0-9]|2([0-4][0-9]|5[0-5]))'|tr " " "\n"|grep [0-9]|head -1)"
+  if [[ $(cut -d '.' -f1 <(echo $enderecoIP)) -lt "256" ]]; then
+    a=$(cut -d '.' -f1 <(echo $enderecoIP))
+  fi
+
+  if [[ $(cut -d '.' -f2 <(echo $enderecoIP)) -lt "256" ]]; then
+    b=$(cut -d '.' -f2 <(echo $enderecoIP))
+  fi
+
+  if [[ $(cut -d '.' -f3 <(echo $enderecoIP)) -lt "256" ]]; then
+    c=$(cut -d '.' -f3 <(echo $enderecoIP))
+  fi
+
+  if [[ $(cut -d '.' -f4 <(echo $enderecoIP)) -lt "256" ]]; then
+    d=$(cut -d '.' -f4 <(echo $enderecoIP))
+  fi
+
+  if [[ "$a" != "" ]] && [[ "$b" != "" ]] && [[ "$c" != "" ]] &&[[ "$d" != "" ]]; then
+  	enderecoIP="$a.$b.$c.$d"
+  fi
+}
+
+getInputIP(){
+  enderecoIP=$(echo "$1"| egrep '((1[0-9]|[1-9]?)[0-9]|2([0-4][0-9]|5[0-5]))\.((1[0-9]|[1-9]?)[0-9]|2([0-4][0-9]|5[0-5]))\.((1[0-9]|[1-9]?)[0-9]|2([0-4][0-9]|5[0-5]))\.((1[0-9]|[1-9]?)[0-9]|2([0-4][0-9]|5[0-5]))')
+}
+
+showIP(){
+  default="$1"
+  if [[ "$1" == "" ]]; then
+    default=$(ifconfig -a -s|egrep -io ^'\w+'|sed '/lo/d'|head -1);
+  fi
+  getIP "$default"
+}
+
+if [[ "$1" == "wan" ]]; then
+  curl -s icanhazip.com --user-agent "Mozilla 5.0" > "$2"/ipaddr
+  if [[ $(cat "$2"/ipaddr) == "" ]]; then
+    echo "Sem conexão com a Internet"
+    exit
+  fi
+  echo "Ip Externo:"
+  cat "$2"/ipaddr
+  exit
+fi
+
+if [[ "$1" == "scan" ]]; then
+  getInputIP "$3"
+  echo "$enderecoIP" > "$2"/getIP
+  exit
+fi
+if [[ "$1" == "lan" ]]; then
+  sudo ifconfig -a|awk '{print $1}'|grep ':'|grep -wv 'lo'|tr -d ':' > "$2"/redes
+  while read interface; do
+    showIP "$interface"
+    if [[ "$enderecoIP" != "" ]]; then
+      echo -e "$interface -> IP:$enderecoIP" >> "$2"/tmp
+      cat "$2"/tmp
+    fi
+    if [[ "$enderecoIP" == "" ]]; then
+      echo "$interface: sem conexão com a rede"
+    fi
+  done < "$2"/redes && rm -f "$2"/redes "$2"/tmp
+fi
+
+rm "$2"/redes "$2"/tmp "$2"/getIP "$2"/ipaddr > /dev/null &>/dev/null

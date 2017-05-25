@@ -1,0 +1,49 @@
+#!/bin/bash
+
+menuAjuda(){
+  echo -e "\033[01mUso: mia rename ... {argumentos ou arquivos}\033[0m"
+  echo -e "\033[01mUso: mia extensao ... {argumentos ou arquivos}\033[0m"
+  echo -e "Parâmetros de uso:
+  -c, --change:
+  \tParâmetro para informar a nova extensão dos arquivos.
+  -d, --dir:
+  \tParâmetro para informar o diretório que contêm os arquivos
+  -h, --help, help:
+  \tChama o menu de ajuda.
+  -o, --original:
+  \tParâmetro para informar a extensão original dos arquivos."
+  echo -e "\033[01mExemplo de uso:\033[0m"
+  echo -e "mia rename -c '.blade.php' -o '.php' -d 'meuSite'"
+}
+
+vetor=($(echo "$*"))
+for args in $*; do
+  if [[ "$args" == "--original" ]] || [[ "$args" == "-o" ]]; then
+    origTmp=$(($tmp+1))
+    original="${vetor[$origTmp]}"
+    original="$(echo $original | tr -d '.')"
+    unset origTmp
+
+  elif [[ "$args" == "--dir" ]] || [[ "$args" == "-d" ]]; then
+      dirTmp=$(($tmp+1))
+      dir="${vetor[$dirTmp]}"
+      unset origTmp
+
+  elif [[ "$args" == "--change" ]] || [[ "$args" == "-c" ]]; then
+      changeTmp=$(($tmp+1))
+      change="${vetor[$changeTmp]}"
+      change="$(echo $change | tr -d '.')"
+      unset changeTmp
+  fi
+  tmp=$(($tmp+1))
+done && unset tmp
+test "$(echo "$dir" | grep -v ^'/')" == "" && dir="$(pwd)/${dir}" && dir=$(echo $dir | tr -s '/')
+
+if [[ "$1" == "--help" ]] || [[ "$1" == "-h" ]] || [[ "$1" == "help" ]]; then
+  menuAjuda && exit
+fi
+
+echo "Diretório destino: $dir"
+echo "Extensão original: $original"
+echo "Extensão modificada: $change"
+find "$dir" -iname "*$original" | sed "s/.*/mv -v &\t&/g; s@$original\$@$change@g" | sh

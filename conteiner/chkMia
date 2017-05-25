@@ -1,0 +1,16 @@
+#!/bin/bash
+
+checkMia(){
+	which mia > /dev/null &>/tmp/verifyMia
+	comandOut="$(cat /tmp/verifyMia)"
+	if [[ "$(grep 'which' /tmp/verifyMia)" != "" ]]; then
+		echo "Não estou instalada em seu sistema. Execute a instalação em ${diretorio}install.sh"
+	else
+		echo "Instalação em: $(which mia)"
+	fi
+}
+diretorio="$1"
+tmpVar=$(ls -l $1| tail -7 | awk '{print $9}' |egrep -v "README.md|install.sh" | tr "\n" ' ')
+checkMia "$diretorio"
+
+rm /tmp/verifyMia

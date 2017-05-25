@@ -1,0 +1,179 @@
+#!/usr/bin/python3
+#coding: UTF-8
+import math, sys, osl
+#############   ESCOPO DE FUNÇÕES  #############
+############### MENU AJUDA #################
+def ajuda():
+    print("miacalc","help, --help, -h")
+    print("\tMostra o menu de ajuda, com todos os parâmetros do programa",end="\n\n")
+
+    print("miacalc","soma, --soma, -s 1 2 3")
+    print("\tFaz uma soma de todos argument os passados",end="\n\n")
+
+    print("miacalc","dif, --dif, -d 3 2 1")
+    print("\tFaz uma subtração(diferença) de todos argumentos passados",end="\n\n")
+
+    print("miacalc","mult, --mult, -m 1 2 3")
+    print("\tFaz uma multiplicação de todos argumentos passados")
+    print("\t*colocar parâmetro 0 irá anular toda sua multiplicação",end="\n\n")
+
+    print("miacalc","div, --div, -q 3 2 1")
+    print("\tFaz uma divisão do primeiro pelos próximos argumentos passados")
+    print("\t*colocar parâmetro 0 irá anular sua divisão",end="\n\n")
+
+    print("miacalc","exp, --exp, -e 4 2")
+    print("\tEleva o primeiro número ao segundo número",end="\n\n")
+
+    print("miacalc","rad, --rad, -r 4 2")
+    print("\tCalcula a raiz do primeiro número com o segundo número",end="\n\n")
+
+    print("miacalc","fat, --fat, -f 6")
+    print("\tCalcula o fatorial do número",end="\n\n")
+
+    print("miacalc","year, --year, -y 6")
+    print("\tCalcula se um ano é ou não bissexto",end="\n\n")
+
+    print("miacalc","pit, --pit, -p 3 4")
+    print("\tCalcula a hipotenusa com base nos numeros informados",end="\n\n")
+
+    exit()
+############### FIM MENU AJUDA #################
+
+#Ano bissexto
+def yearbix(ano_year):
+    ano = int(ano_year[0])
+    if ano % 4 == 0:
+        print(ano,"é ano Bissexto")
+    else:
+        print(ano,"não é um ano Bissexto")
+    exit()
+#Fim ano bissexto
+
+#arredonda valores
+def arredondar(num):
+    return float( '%g' % ( num ) )
+#fim arredonda valores
+
+#Soma fatores
+def soma(fatorsoma):
+    total = 0
+    for numero in fatorsoma[0:len(fatorsoma)]:
+        total = total + float(numero)
+    return(total)
+#fim soma fatores
+
+#Subtração de fatores
+def diferenca(dif):
+    total, first_fator = 0, float(dif[0])
+    for numero in dif[1:len(dif)]:
+        total = total + float(numero)
+    return (first_fator-total)
+#Fim subtração de fatores
+
+#Multiplica fatores
+def multiply(mults):
+    total = 1
+    if 0 in mults:
+        return 0
+    for numero in mults[0:len(mults)]:
+        total = float(total) * float(numero)
+    total = arredondar(total)
+    return(total)
+#fim multiplica fatores
+
+#Divide fatores
+def divisao(div_fator):
+    dividendo, first_fator = float(div_fator[1]), float(div_fator[0])
+    if 0 in div_fator:
+        return 0
+
+    if len(div_fator) == 1:
+        return float(div_fator[0])
+
+    total = first_fator / dividendo
+    for numero in div_fator[2:len(div_fator)]:
+        total = total / float(numero)
+    total = arredondar(total)
+    return(total)
+#fim divide fatores
+
+#potenciação
+def potencia(lista):
+    base, expoente = float(lista[0]), float(lista[1])
+    if base == 1:
+        return 1
+    if expoente == 0:
+        return 1
+    total = math.pow(base,expoente)
+    return(total)
+#fim potenciação
+
+#radiciação
+def raiz(lista):
+    base = float(lista[0])
+    raiz = 1/float(lista[1])
+    total = float(base)**(float(raiz))
+    arredondar(total)
+    return(total)
+#fim potenciação
+
+#pitagoras
+def pitagoras(catetos):
+    catop = float(catetos[0])
+    catadj = float(catetos[1])
+    total = math.hypot(catop,catadj)
+    arredondar(total)
+    return(total)
+#fim potenciação
+
+#função fatorial
+def fatorial(fator):
+    return (math.factorial(int(fator[0])))
+#fim função fatorial
+
+#############   FIM DE ESCOPO DE FUNÇÕES  #############
+
+#############   ___main___  #############
+
+if len(sys.argv) < 2 or "--help" in sys.argv or "help" in sys.argv or "-h" in sys.argv or sys.argv[-1] == "calc":
+    ajuda()
+
+total = []
+for numero in sys.argv[2:len(sys.argv)]:
+    total.append(numero)
+
+if sys.argv[1] == "soma" or sys.argv[1] == "-s" or sys.argv[1] == "--soma":
+    print("Total da soma:",soma(total))
+
+elif sys.argv[1] == "dif" or sys.argv[1] == "-d" or sys.argv[1] == "--dif":
+    print("Total da subtração:",diferenca(total))
+
+elif sys.argv[1] == "year" or sys.argv[1] == "-y" or sys.argv[1] == "--year":
+    print(yearbix(total))
+
+elif sys.argv[1] == "mult" or sys.argv[1] == "-m" or sys.argv[1] == "--mult":
+    print("Total da multiplicação:",multiply(total))
+
+elif sys.argv[1] == "div" or sys.argv[1] == "--div"  or sys.argv[1] == "-q":
+    print("Total da divisão:",divisao(total))
+
+elif sys.argv[1] == "exp" or sys.argv[1] == "-e" or sys.argv[1] == "--exp":
+    if len(total) != 2:
+        print("Este parâmetro necessita de 2 valores")
+        exit()
+    print("Total da potenciação:",potencia(total))
+
+elif sys.argv[1] == "rad" or sys.argv[1] == "-r" or sys.argv[1] == "--rad":
+    if len(total) != 2:
+        print("Este parâmetro necessita de 2 valores")
+        exit()
+    print("Total da radiciação",raiz(total))
+
+elif sys.argv[1] == "pit" or sys.argv[1] == "-p" or sys.argv[1] == "--pit":
+    if len(total) != 2:
+        print("Este parâmetro necessita de 2 valores")
+        exit()
+    print("Sua hipotenusa é de:",pitagoras(total))
+
+elif sys.argv[1] == "fat" or sys.argv[1] == "-f" or sys.argv[1] == "--fat":
+    print("O fatorial de",total[0],"é:",fatorial(total))

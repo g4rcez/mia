@@ -1,0 +1,13 @@
+#!/bin/bash
+path="$1"
+whereMia="$2"
+
+for palavra in $*; do
+  string=( ${string[@]} "$palavra")
+done
+pesquisar=${string[@]:1}
+
+cat database/MACLISTmia.list database/MACWIFImia.list > "$path/maclist"
+echo -e "MAC Addr   |   Fabricante"
+echo "--------   |   ----------"
+grep -i "$pesquisar" "$path/maclist" |sed 's/.. .. ../&   |  /g' | sort
