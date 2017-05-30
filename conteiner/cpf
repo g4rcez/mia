@@ -1,9 +1,13 @@
 #!/bin/bash
 # Exigido apenas o número de CPF
+# A validação do CPF ainda não cadastraada
+# Agradecimentos a RMdir
 
-cpf="$1"
-nomePessoa=$(curl -s 'http://cpfhunter.pe.hu' --data "nDoc=$cpf&proxy=1" |
-grep '<nome>' | sed 's/<[^>]*>//g' | cut -d ':' -f2 | sed 's/^ *//g'|
-tr A-Z a-z | sed 's/ ./\U&/g; s/^./\U&/g')
-
-echo "Nome da pessoa: $nomePessoa"
+for search in $*; do
+  cpf="$search"
+  echo -e "Buscando por $cpf..."
+  nomePessoa=$(curl -s 'http://cpfhunter.pe.hu' --data "nDoc=$cpf&proxy=1" |
+  grep '<nome>' | sed 's/<[^>]*>//g' | cut -d ':' -f2 | sed 's/^ *//g'|
+  tr A-Z a-z | sed 's/ ./\U&/g; s/^./\U&/g; /De/s//de/g')
+  echo -e "Nome: $nomePessoa\n"
+done
