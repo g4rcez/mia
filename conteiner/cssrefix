@@ -1,0 +1,7 @@
+#!/bin/bash
+# Exige apenas um arquivo com seu path correto, caso exista, será salvo em
+# /tmp/format_nomearquivo
+
+for search in $*; do
+  test -e $search && echo "Deminificar o arquivo: $search" && sed 's/}/\n&/g' $search | sed 's/{/{\n/g' | sed '/.*{\|}/!s/.*/\t&/g' | sed 's/}/}\n/g'  | sed '/./!d' > "/tmp/format_$search" && echo "Uma versão não minificada foi salva em /tmp/format_$search" || echo "O arquivo $search não foi encontrado"
+done
