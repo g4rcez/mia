@@ -7,6 +7,9 @@ Parâmetros de uso:
 footprint, scan
 \tRealiza um scan intenso em hosts e domínios, trazendo o maior número de informações
 \tem um arquivo XML, padrão NMAP com a paleta de cores alterada. Tema 'Dark'.
+cpf
+\tBusca em uma base de dados pelo CPF informado e retorna o nome da pessoa
+\t*Não faz uma validação se o valor informado é um CPF (em desenvolvimento)
 \033[01m\nFunções Misc:\033[0m
 Parâmetros de uso:
 ola, help:
@@ -31,6 +34,9 @@ tempo, data
 cria, create
 \tCria um arquivo com a extensão passada. De acordo com a extensão, M.I.A irá
 \tgerar um código específico para aquela extensão do arquivo.
+css, revminifier
+\tTransforma um arquivo .min.css em um arquivo não minificado
+\t(Correção de linhas e indentação)
 
 \033[01m\nFunções de Rede e configuração de servidores:\033[0m
 Parâmetros de uso:
