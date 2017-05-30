@@ -101,7 +101,7 @@ interacoes(){
 }
 
 execFunctions(){
-  chmod +x "${whereMia}"conteiner/* -R
+  chmod +x "${whereMia}"conteiner/* -R -f
   if [[ "$1" == "" ]] || [[ "$1" == "help" ]] || [[ "$1" == "ola" ]]; then
     menuajuda ;
   fi
@@ -112,6 +112,12 @@ execFunctions(){
 
   elif [[ "$1" == "tempo" ]] || [[ "$1" == "data" ]]; then
     bash "${whereMia}"conteiner/tempo
+
+  elif [[ "$1" == "cpf" ]]; then
+    bash "${whereMia}"conteiner/cpf $parametros
+
+  elif [[ "$1" == "css" ]] || [[ "$1" == "revminifier" ]]; then
+    bash "${whereMia}"conteiner/cssrefix $parametros
 
   elif [[ "$1" == "cara" ]] || [[ "$1" == "coroa" ]]; then
     getSorte
@@ -195,11 +201,3 @@ banner && echo -e "Olá $nome, bem vindo(a). ID: $usuario"
 echo ""
 interacoes "$1" "$parametros"
 execFunctions "$1" "$parametros"
-
-# vermelho | red) cor="31m"     # verde | green) cor="32m"
-# amarelo | yellow) cor="33m"   # azul | blue) cor="34m"
-# rosa | pink) cor="35m"        # cinza | gray) cor="36m"
-# branco | white) cor="37m"     # preto | black) cor="30m"
-# normal | nor) atributo="0"    # negrito | neg | bold) atributo="1"
-# sublinhado | sub | underline) atributo="4"  # reverso | rev) atributo="7"
-# echo -e "\033[01;31mOperação somente realizada pelo root\033[0m"
