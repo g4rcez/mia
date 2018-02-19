@@ -1,0 +1,9 @@
+{
+	"check":{
+        "action":"Check the integrity of file",
+        "help":"man/check.md",
+        "path":"src/check.sh"
+    },
+	"version": "3.0.0",
+	"release": "Development"
+}

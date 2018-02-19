@@ -38,16 +38,6 @@ if [[ "$file" == "" ]]; then
   read -p "Informe o path do arquivo: " file
 fi
 
-# Bloco de comparação web
-# file=$(echo "$busca"|tr " " "\n"|grep -A 1 "\-f"|tail -1)
-# if [[ "$file" == "" ]]; then
-#   file=$(echo "$busca" |tr " " "\n" | grep -A 1 "\-\-file" | tail -1)
-# fi
-# if [[ "$file" == "" ]]; then
-#   read -p "Informe o path do arquivo: " file
-# fi
-
-
 test ! -e "$file" && echo "Arquivo não existe" && exit || echo "Arquivo: $file"
 
 elementos=$(echo "$#")
