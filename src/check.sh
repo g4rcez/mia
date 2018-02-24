@@ -1,12 +1,5 @@
 #!/bin/bash
 
-if [[ "$1" == "help" ]]; then
-    banner && echo
-    file="$(cat "$(pwd)/mind.json" | jq -r .check.help)"
-    cat "$file"
-    exit
-fi
-
 hashs=($(echo "$@" | xargs -n1 | sed -n '/-h/p' | sed 's/-h//g'))
 hashAlgos=(
     "md5sum"
@@ -24,7 +17,7 @@ for file in "$@"; do
             for hashComparator in "${hashs[@]}"; do
                 tempHash="$($fileHash $file | cut -d ' ' -f1)"
                 if contains "$tempHash" "$hashComparator"; then  
-                    echo "[$fileHash] Compatível com o arquivo: $file => $tempHash"
+                    echo -e "${COLOR_GREEN}${BOLD}[$fileHash]${RESET}${COLOR_NC} Arquivo integro ${UNDERLINE}$1${RESET} => $2"
                 fi
             done
         done

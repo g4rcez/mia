@@ -1,9 +1,39 @@
 {
-	"check":{
-        "action":"Check the integrity of file",
-        "help":"man/check.md",
-        "path":"src/check.sh"
-    },
+	"check": {
+		"action": "Check the integrity of file",
+		"help": "man/check.md",
+		"path": "src/check.sh"
+	},
+	"web": {
+		"action": "Check the integrity of file",
+		"help": "man/web.md",
+		"path": "src/web.sh"
+	},
+	"base": {
+		"action": "Check the integrity of file",
+		"help": "man/base.md",
+		"path": "src/base.sh"
+	},
+	"server": {
+		"action": "Check the integrity of file",
+		"help": "man/server.md",
+		"path": "src/server.sh"
+	},
+	"network": {
+		"action": "Check the integrity of file",
+		"help": "man/network.md",
+		"path": "src/network.sh"
+	},
+	"cep": {
+		"action": "Check the integrity of file",
+		"help": "man/cep.md",
+		"path": "src/cep.sh"
+	},
+	"convert": {
+		"action": "Check the integrity of file",
+		"help": "man/convert.md",
+		"path": "src/convert.sh"
+	},
 	"version": "3.0.0",
 	"release": "Development"
 }
