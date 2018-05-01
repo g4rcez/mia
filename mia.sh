@@ -44,7 +44,7 @@ init(){
 
 banner(){
   echo -e "
-  ███╗   ███╗    ██╗     █████╗ 
+  ███╗   ███╗    ██╗     █████╗
   ████╗ ████║    ██║    ██╔══██╗
   ██╔████╔██║    ██║    ███████║
   ██║╚██╔╝██║    ██║    ██╔══██║
@@ -80,7 +80,7 @@ packageManager(){
     }
   elif [[ -e "$(which pacman 2>/dev/null)" ]]; then
     install(){
-      pacman -S "$@" --noconfirm 
+      pacman -S "$@" --noconfirm
     }
   fi
   "$@"
@@ -97,12 +97,13 @@ if [[ "$#" < 1 ]];then
   banner && cat man/help.md
 fi
 
+
+
 export -f contains banner replace packageManager help
 help "$@" && what "$@"
-init "$@" 
+init "$@"
 if [[ "$command" == "null" ]]; then
   echo "Não foi encontrado o comando..."
   exit
 fi
 chmod +x "$command" && shift && ./$command $@
-
