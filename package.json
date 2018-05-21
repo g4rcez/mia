@@ -1,0 +1,27 @@
+{
+  "name": "mia",
+  "version": "1.0.0",
+  "description": "### Chamada da ferramenta > uname@kurupira[~]: mia (comando) ...(parâmetros)...",
+  "main": "index.js",
+  "directories": {
+    "man": "man"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vandalvnl/mia.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vandalvnl/mia/issues"
+  },
+  "homepage": "https://github.com/vandalvnl/mia#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "ramda": "^0.25.0"
+  }
+}

@@ -28,4 +28,17 @@ ssh(){
     fi
     $@
 }
+
+nginx(){
+    configure(){
+        install
+    }
+
+    install(){
+        if [[ ! -e "/etc/nginx/nginx.conf" ]]; then
+            packageManager install nginx
+        fi
+    }
+}
+
 $@

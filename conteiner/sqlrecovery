@@ -12,7 +12,7 @@ while [[ "$password" == "" ]]; do
   read -p "Informe a senha do DB: " password
 done
 
-systemctl stop mysqld
+systemctl stop mysql
 systemctl set-environment MYSQLD_OPTS="--skip-grant-tables"
 systemctl start mysqld
 
@@ -20,8 +20,8 @@ echo "UPDATE mysql.user SET authentication_string = PASSWORD('$password')
     -> WHERE User = 'root' AND Host = 'localhost';" | mysql -u root
 echo "FLUSH PRIVILEGES;" | mysql -u root
 
-systemctl stop mysqld
+systemctl stop mysql
 systemctl unset-environment MYSQLD_OPTS
-systemctl start mysqld
+systemctl start mysql
 
-mysql -u root -p%
+mysql -u root -p$password

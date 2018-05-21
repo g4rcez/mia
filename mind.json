@@ -34,6 +34,16 @@
 		"help": "man/convert.md",
 		"path": "src/convert.sh"
 	},
+	"database": {
+		"action": "Change password of database",
+		"help": "man/database.md",
+		"path": "src/database.sh"
+	},
+	"country": {
+		"action": "List countries in the world",
+		"help": "man/country.md",
+		"path": "src/country.js"
+	},
 	"version": "3.0.0",
 	"release": "Development"
 }

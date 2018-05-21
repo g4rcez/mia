@@ -93,11 +93,10 @@ help(){
   fi
 }
 
-if [[ "$#" < 1 ]];then
+if [[ "$#" -eq 0 ]];then
   banner && cat man/help.md
+  exit
 fi
-
-
 
 export -f contains banner replace packageManager help
 help "$@" && what "$@"
